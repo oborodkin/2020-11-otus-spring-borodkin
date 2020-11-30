@@ -1,6 +1,8 @@
 package ru.otus.borodkin.domain;
 
 import lombok.AllArgsConstructor;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import ru.otus.borodkin.service.QuestionsService;
 
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
  */
 @AllArgsConstructor
 public class TheTest {
+    private static final Logger log = LogManager.getLogger(TheTest.class);
+
     private final QuestionsService questionsService;
 
     /**
@@ -20,8 +24,7 @@ public class TheTest {
             System.out.println("A.I.T.S. - Artificial Intelligence Testing System");
             showAllQuestions();
         } catch (Exception e) {
-            System.out.println("Sorry...");
-            e.printStackTrace();
+            log.error(e);
         }
 
     }
