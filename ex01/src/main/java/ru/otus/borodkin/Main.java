@@ -10,6 +10,5 @@ public class Main {
         TheTest theTest = context.getBean(TheTest.class);
         theTest.showTest();
         System.out.println("Have nice day!");
-        context.close();
     }
 }

@@ -1,20 +1,18 @@
 package ru.otus.borodkin.utils;
 
+import lombok.AllArgsConstructor;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Считывает CSV-файл.
+ */
+@AllArgsConstructor
 public class CsvReader {
     private final String fileName;
-
-    /**
-     * Считывает CSV-файл
-     * @param fileName имя файла
-     */
-    public CsvReader(String fileName) {
-        this.fileName = fileName;
-    }
 
     public List<List<String>> getLines() throws IOException {
         List<List<String>> records = new ArrayList<>();

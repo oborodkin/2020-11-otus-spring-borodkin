@@ -1,19 +1,16 @@
 package ru.otus.borodkin.domain;
 
+import lombok.AllArgsConstructor;
 import ru.otus.borodkin.service.QuestionsService;
 
 import java.util.List;
 
+/**
+ * Реализует функционал тестирования.
+ */
+@AllArgsConstructor
 public class TheTest {
     private final QuestionsService questionsService;
-
-    /**
-     * Реализует функционал тестирования.
-     * @param questionsService сервис предоставляющий вопросы и ответы
-     */
-    public TheTest(QuestionsService questionsService) {
-        this.questionsService = questionsService;
-    }
 
     /**
      * Выводи информацию о тесте, список вопросов и вариантов ответов

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import ru.otus.borodkin.domain.Question;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,23 +16,11 @@ public class QuestionParserTest {
     @Test
     void shouldHaveCorrectConstructor() {
         List<String> tstLine = new ArrayList<>();
-        List<String> tstAnswers = new ArrayList<>();
-        List<Integer> tstRightAnswers = new ArrayList<>();
-
-        tstAnswers.add("A1");
-        tstAnswers.add("A2");
-        tstAnswers.add("A3");
-        tstAnswers.add("A4");
-        tstAnswers.add("A5");
-
-        tstRightAnswers.add(1);
-        tstRightAnswers.add(2);
-        tstRightAnswers.add(3);
 
         tstLine.add("100");
         tstLine.add("Title");
         tstLine.add("Input");
-        tstLine.addAll(tstAnswers);
+        tstLine.addAll(Arrays.asList("A1", "A2", "A3", "A4", "A5"));
         tstLine.add("1,2,3");
 
         QuestionParser questionParser = new QuestionParser(tstLine);

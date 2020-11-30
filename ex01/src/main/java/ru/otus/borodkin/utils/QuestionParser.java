@@ -1,18 +1,16 @@
 package ru.otus.borodkin.utils;
 
+import lombok.AllArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Представляет коллекцию, составные части вопроса и ответов, отдельными свойствами.
+ */
+@AllArgsConstructor
 public class QuestionParser {
     private final List<String> csvLine;
-
-    /**
-     * Представляет коллекцию отдельными свойствами
-     * @param csvLine Строки: id;title;type;answervalue1;answervalue2;anservalue3;answervalue4;answervalue5;rightanswers
-     */
-    public QuestionParser(List<String> csvLine) {
-        this.csvLine = csvLine;
-    }
 
     public int getId() {
         return Integer.parseInt(csvLine.get(0));
