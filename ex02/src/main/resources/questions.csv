@@ -1,0 +1,6 @@
+id;title;type;answervalue1;answervalue2;anservalue3;answervalue4;answervalue5;rightanswer
+1;How many planets in the our star system?;free;;;;;;8
+2;Chose DML operations;multi;SELECT;INSERT;UPDATE;DELETE;DROP TABLE;1,2,3,4
+3;What is the correct answer for 2+2x4;one;10;16;13;;;1
+4;Who is the 46th president of the USA?;one;Donald Trump;Joe Biden;Vladimir Putin;;;2
+5;How Much Is The Fish?;free;;;;;;Scooter
