@@ -1,0 +1,10 @@
+${AnsiStyle.BOLD}
+############################################################
+
+${AnsiColor.RED}      .'.       ${AnsiColor.GREEN}| ${AnsiColor.RED}`````|````` ${AnsiColor.GREEN}            ..''''${AnsiColor.DEFAULT}
+${AnsiColor.RED}    .''```.     ${AnsiColor.GREEN}| ${AnsiColor.RED}     |      ${AnsiColor.GREEN}         .''      ${AnsiColor.DEFAULT}
+${AnsiColor.RED}  .'       `.   ${AnsiColor.GREEN}| ${AnsiColor.RED}     |      ${AnsiColor.GREEN}      ..'         ${AnsiColor.DEFAULT}
+${AnsiColor.RED}.'           `. ${AnsiColor.GREEN}| ${AnsiColor.RED}     |      ${AnsiColor.GREEN}....''            ${AnsiColor.DEFAULT}
+
+${AnsiColor.BLUE}Artificial Intelligence Testing System${AnsiColor.DEFAULT}
+############################################################
