@@ -1,0 +1,4 @@
+id;title;type;answervalue1;answervalue2;anservalue3;answervalue4;answervalue5;rightanswer
+1;Free input question;free;;;;;;8
+2;Multi input question;multi;one;two;three;four;five;1,2,3,4,5
+3;One input question;one;one;two;three;four;five;5
