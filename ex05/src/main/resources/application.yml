@@ -1,0 +1,4 @@
+application:
+  filename: "/questions.csv"
+  passgrade: 4
+  locale: ru_RU
