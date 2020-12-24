@@ -9,7 +9,6 @@ import org.h2.tools.Console;
 public class Main {
 
     public static void main(String[] args) {
-        //Console.main(args);
         SpringApplication.run(Main.class, args);
     }
 

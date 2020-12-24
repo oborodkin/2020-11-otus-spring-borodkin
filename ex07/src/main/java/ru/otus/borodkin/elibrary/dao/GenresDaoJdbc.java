@@ -34,21 +34,6 @@ public class GenresDaoJdbc implements GenresDao {
         return jdbc.query("select id, name from GENRES", new GenreMapper());
     }
 
-    @Override
-    public void insert(Genre genre) {
-
-    }
-
-    @Override
-    public void update(Genre genre) {
-
-    }
-
-    @Override
-    public void deleteById(int id) {
-
-    }
-
     private static class GenreMapper implements RowMapper<Genre> {
         @Override
         public Genre mapRow(ResultSet resultSet, int i) throws SQLException {

@@ -34,21 +34,6 @@ public class AuthorsDaoJdbc implements AuthorsDao {
         return jdbc.query("select id, full_name from AUTHORS", new AuthorMapper());
     }
 
-    @Override
-    public void insert(Author author) {
-
-    }
-
-    @Override
-    public void update(Author author) {
-
-    }
-
-    @Override
-    public void deleteById(int id) {
-
-    }
-
     private static class AuthorMapper implements RowMapper<Author> {
         @Override
         public Author mapRow(ResultSet resultSet, int i) throws SQLException {

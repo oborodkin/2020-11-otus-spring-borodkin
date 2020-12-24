@@ -8,7 +8,4 @@ public interface GenresDao {
     Genre getById(int id);
     Genre getByName(String name);
     List<Genre> getAll();
-    void insert(Genre genre);
-    void update(Genre genre);
-    void deleteById(int id);
 }
