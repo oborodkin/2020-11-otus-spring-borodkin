@@ -61,7 +61,7 @@ values (
 insert into BOOKS_COMMENTS (BOOK_ID, COMMENT_TEXT)
 values (
         (select id from BOOKS where TITLE = 'Ложная слепота'),
-        'Ничего не понял но очень интересно'
+        'Ничего не понял, но очень интересно'
        ),
        (
         (select id from BOOKS where TITLE = 'Ложная слепота'),

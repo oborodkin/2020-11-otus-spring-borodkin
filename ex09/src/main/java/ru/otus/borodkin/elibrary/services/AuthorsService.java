@@ -5,5 +5,5 @@ import ru.otus.borodkin.elibrary.models.Author;
 import java.util.List;
 
 public interface AuthorsService {
-    List<Author> getAllAuthors();
+    String getAllAuthorsAsText();
 }

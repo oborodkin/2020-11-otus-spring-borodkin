@@ -6,7 +6,7 @@ import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import java.util.List;
 
 public interface BooksService {
-    List<Book> getAllBooks();
+    String getAllBooksAsText();
     Book getBookById(long bookId) throws EntityNotFoundException ;
     Book insertBook(String title, long genreId, List<Long> authors) throws EntityNotFoundException;
     void updateBook(long bookId, String title, long genreId, List<Long> authors) throws EntityNotFoundException;

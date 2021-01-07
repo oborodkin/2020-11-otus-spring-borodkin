@@ -24,7 +24,7 @@ public class Comment {
     @Column(name = "comment_text", nullable = false)
     private String text;
 
-    public String getGenreText(){
+    public String getCommentText(){
         return "ID: " + id + ", " + text;
     }
 
