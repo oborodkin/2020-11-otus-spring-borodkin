@@ -11,15 +11,13 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "books_comments")
-@NamedEntityGraph(name = "comment-book", attributeNodes = {@NamedAttributeNode("book")})
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(targetEntity = Book.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private long bookId;
 
     @Column(name = "comment_text", nullable = false)
     private String text;

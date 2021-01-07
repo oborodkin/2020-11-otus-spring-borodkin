@@ -41,7 +41,7 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Show book comments: <BOOK ID>", key = {"c", "comments"})
-    public String showAllBookComments(long bookId) {
+    public String showAllBookComments(long bookId) throws EntityNotFoundException {
         return commentsService.getAllCommentsAsTextByBookId(bookId);
     }
 
@@ -69,4 +69,10 @@ public class LibraryShell {
     }
 
  */
+
+    @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "add comment"})
+    public String addCommentToBook(long bookId, String text) {
+        commentsService.insertComment(bookId, text);
+        return "Комментарий добавлен";
+    }
 }

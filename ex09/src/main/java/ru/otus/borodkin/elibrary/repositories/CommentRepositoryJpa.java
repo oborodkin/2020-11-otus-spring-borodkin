@@ -20,18 +20,14 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public List<Comment> getByBook(long bookId) {
-        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.book.id = :book_id", Comment.class);
-        EntityGraph<?> entityGraph = em.getEntityGraph("comment-book");
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.bookId = :book_id", Comment.class);
         query.setParameter("book_id", bookId);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
     @Override
     public List<Comment> getAll() {
         TypedQuery<Comment> query = em.createQuery("select c from Comment c ", Comment.class);
-        EntityGraph<?> entityGraph = em.getEntityGraph("comment-book");
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
