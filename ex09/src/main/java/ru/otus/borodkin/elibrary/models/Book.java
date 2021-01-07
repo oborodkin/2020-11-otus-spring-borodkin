@@ -35,13 +35,11 @@ public class Book {
     @JoinTable(name = "books_authors", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authors;
 
-/*
     @Fetch(FetchMode.SELECT)
     @BatchSize(size = 10)
     @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id")
     private List<Comment> comments;
-*/
 
     public String getBookAuthorsText() {
         return authors.stream()

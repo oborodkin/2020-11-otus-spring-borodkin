@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.models.Book;
+import ru.otus.borodkin.elibrary.models.Comment;
 import ru.otus.borodkin.elibrary.models.Genre;
 import ru.otus.borodkin.elibrary.repositories.AuthorRepository;
 import ru.otus.borodkin.elibrary.repositories.BookRepository;
@@ -56,8 +57,26 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public void deleteBookById(long bookId) {
+    public void deleteBookById(long bookId) throws EntityNotFoundException {
 
+    }
+
+    @Override
+    @Transactional
+    public Book addCommentToBook(long bookId, String text) throws EntityNotFoundException {
+        Book book = getBookById(bookId);
+        book.getComments().add(new Comment(0, text));
+        return null;
+    }
+
+    @Override
+    public Book updateBookComment(long bookId, long commentId, String text) throws EntityNotFoundException {
+        return null;
+    }
+
+    @Override
+    public Book deleteBookComment(long bookId, long commentId) throws EntityNotFoundException {
+        return null;
     }
 
     private Book makeBook(long bookId, String title, long genreId, List<Long> authors) throws EntityNotFoundException {
@@ -73,6 +92,6 @@ public class BooksServiceImpl implements BooksService {
             }
             authorList.add(author.get());
         }
-        return new Book(bookId, title, genre.get(), authorList);
+        return new Book(bookId, title, genre.get(), authorList, null);
     }
 }

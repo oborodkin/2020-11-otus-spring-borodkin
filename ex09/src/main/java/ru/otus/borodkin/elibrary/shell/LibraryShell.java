@@ -1,16 +1,11 @@
 package ru.otus.borodkin.elibrary.shell;
 
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
 import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
-import ru.otus.borodkin.elibrary.models.Author;
-import ru.otus.borodkin.elibrary.models.Genre;
 import ru.otus.borodkin.elibrary.services.AuthorsService;
 import ru.otus.borodkin.elibrary.services.BooksService;
-import ru.otus.borodkin.elibrary.services.CommentsService;
 import ru.otus.borodkin.elibrary.services.GenresService;
 
 import java.util.List;
@@ -23,7 +18,6 @@ public class LibraryShell {
     private final AuthorsService authorsService;
     private final GenresService genresService;
     private final BooksService booksService;
-    private final CommentsService commentsService;
 
     @ShellMethod(value = "Show all authors", key = {"a", "authors"})
     public String showAllAuthors() {
@@ -40,10 +34,12 @@ public class LibraryShell {
         return booksService.getAllBooksAsText();
     }
 
+/*
     @ShellMethod(value = "Show book comments: <BOOK ID>", key = {"c", "comments"})
     public String showAllBookComments(long bookId) throws EntityNotFoundException {
         return commentsService.getAllCommentsAsTextByBookId(bookId);
     }
+ */
 
     @ShellMethod(value = "Insert book: \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bi", "insert book"})
     public String insertBook(String title, long genreId, String authors) throws EntityNotFoundException {
@@ -70,9 +66,12 @@ public class LibraryShell {
 
  */
 
+/*
     @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "add comment"})
     public String addCommentToBook(long bookId, String text) {
         commentsService.insertComment(bookId, text);
         return "Комментарий добавлен";
     }
+
+ */
 }
