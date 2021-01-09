@@ -6,6 +6,7 @@ import org.springframework.shell.standard.ShellMethod;
 import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import ru.otus.borodkin.elibrary.services.AuthorsService;
 import ru.otus.borodkin.elibrary.services.BooksService;
+import ru.otus.borodkin.elibrary.services.CommentsService;
 import ru.otus.borodkin.elibrary.services.GenresService;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class LibraryShell {
     private final AuthorsService authorsService;
     private final GenresService genresService;
     private final BooksService booksService;
+    private final CommentsService commentsService;
 
     @ShellMethod(value = "Show all authors", key = {"a", "authors"})
     public String showAllAuthors() {
@@ -36,7 +38,8 @@ public class LibraryShell {
 
     @ShellMethod(value = "Show book comments: <BOOK ID>", key = {"c", "comments"})
     public String showAllBookComments(long bookId) throws EntityNotFoundException {
-        return booksService.getBookAllCommentsAsText(bookId);
+        return commentsService.getAllCommentsAsTextByBookId(bookId);
+        //return booksService.getBookAllCommentsAsText(bookId);
     }
 
     @ShellMethod(value = "Insert book: \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bi", "insert book"})
@@ -67,7 +70,19 @@ public class LibraryShell {
 
     @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "comment add"})
     public String addCommentToBook(long bookId, String text) throws EntityNotFoundException {
-        booksService.addCommentToBook(bookId, text);
+        commentsService.insertComment(bookId, text);
         return "Комментарий добавлен";
+    }
+
+    @ShellMethod(value = "Update comment to book: <COMMENT_ID> \"<TEXT>\"", key = {"cu", "comment update"})
+    public String updateCommentToBook(long commentId, String text) throws EntityNotFoundException {
+        commentsService.updateComment(commentId, text);
+        return "Комментарий изменён";
+    }
+
+    @ShellMethod(value = "Delete comment to book: <COMMENT_ID> \"<TEXT>\"", key = {"cd", "comment delete"})
+    public String deleteCommentToBook(long commentId) {
+        commentsService.deleteCommentById(commentId);
+        return "Комментарий удалён";
     }
 }

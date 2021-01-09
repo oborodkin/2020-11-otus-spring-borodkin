@@ -40,18 +40,12 @@ public class Book {
     @Fetch(FetchMode.SELECT)
     @BatchSize(size = 10)
     @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id", nullable = false, updatable = false)
+    @JoinColumn(name = "book_id", nullable = false, updatable = false, insertable = false)
     private List<Comment> comments;
 
     public String getBookAuthorsText() {
         return authors.stream()
                 .map(Author::getAuthorText)
-                .collect(Collectors.joining("\n\t"));
-    }
-
-    public String getBookCommentsText() {
-        return comments.stream()
-                .map(Comment::getCommentText)
                 .collect(Collectors.joining("\n\t"));
     }
 

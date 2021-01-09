@@ -70,11 +70,6 @@ public class BookRepositoryJpaTest {
 
     private static final String EXPECTED_UPDATE_TITLE_FOR_BOOK = "Новое название";
 
-    private static final long EXPECTED_NEW_COMMENT_ID = 5;
-    private static final String EXPECTED_NEW_COMMENT_TEXT = "Новый комментарий для книги";
-
-    private static final String EXPECTED_UPDATE_COMMENT_TEXT = "Комментарий обновлён";
-
     @Autowired
     private BookRepositoryJpa bookRepositoryJpa;
 
@@ -89,8 +84,8 @@ public class BookRepositoryJpaTest {
                 new Genre(EXPECTED_BOOK_STORY_GENRE_ID, EXPECTED_BOOK_STORY_GENRE_NAME),
                 List.of(new Author(EXPECTED_BOOK_STORY_AUTHOR_ID, EXPECTED_BOOK_STORY_AUTHOR_FULLNAME)),
                 List.of(
-                        new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
-                        new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
+                        new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
+                        new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
                 )
         );
         var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_STORY_ID);
@@ -105,21 +100,21 @@ public class BookRepositoryJpaTest {
                         new Genre(EXPECTED_BOOK_STORY_GENRE_ID, EXPECTED_BOOK_STORY_GENRE_NAME),
                         List.of(new Author(EXPECTED_BOOK_STORY_AUTHOR_ID, EXPECTED_BOOK_STORY_AUTHOR_FULLNAME)),
                         List.of(
-                                new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
-                                new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
+                                new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
+                                new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
                         )
                 ),
                 new Book(EXPECTED_BOOK_ROMAN_ID, EXPECTED_BOOK_ROMAN_TITLE,
                         new Genre(EXPECTED_BOOK_ROMAN_GENRE_ID, EXPECTED_BOOK_ROMAN_GENRE_NAME),
                         List.of(new Author(EXPECTED_BOOK_ROMAN_AUTHOR_ID, EXPECTED_BOOK_ROMAN_AUTHOR_FULLNAME)),
-                        List.of(new Comment(EXPECTED_BOOK_ROMAN_COMMENT_1_ID, EXPECTED_BOOK_ROMAN_COMMENT_1_TEXT))
+                        List.of(new Comment(EXPECTED_BOOK_ROMAN_COMMENT_1_ID, EXPECTED_BOOK_ROMAN_ID, EXPECTED_BOOK_ROMAN_COMMENT_1_TEXT))
                 ),
                 new Book(EXPECTED_BOOK_MULTI_ID, EXPECTED_BOOK_MULTI_TITLE,
                         new Genre(EXPECTED_BOOK_MULTI_GENRE_ID, EXPECTED_BOOK_MULTI_GENRE_NAME),
                         List.of(
                                 new Author(EXPECTED_BOOK_MULTI_AUTHOR_1_ID, EXPECTED_BOOK_MULTI_AUTHOR_1_FULLNAME),
                                 new Author(EXPECTED_BOOK_MULTI_AUTHOR_2_ID, EXPECTED_BOOK_MULTI_AUTHOR_2_FULLNAME)),
-                        List.of(new Comment(EXPECTED_BOOK_MULTI_COMMENT_1_ID, EXPECTED_BOOK_MULTI_COMMENT_1_TEXT))
+                        List.of(new Comment(EXPECTED_BOOK_MULTI_COMMENT_1_ID, EXPECTED_BOOK_MULTI_ID, EXPECTED_BOOK_MULTI_COMMENT_1_TEXT))
                 )
         );
         var actualBooks = bookRepositoryJpa.getAll();
@@ -133,7 +128,7 @@ public class BookRepositoryJpaTest {
         assertThat(actualBooks.get(2)).usingRecursiveComparison().isEqualTo(expectedBooks.get(2));
     }
 
-    @DisplayName("добавлять ожидаемую книгу в БД")
+    @DisplayName("добавлять ожидаемую книгу")
     @Test
     void shouldInsertBook() {
         var expectedGenre = em.find(Genre.class, EXPECTED_STORY_GENRE_ID);
@@ -147,7 +142,7 @@ public class BookRepositoryJpaTest {
     }
 
 
-    @DisplayName("изменять ожидаемую книгу в БД")
+    @DisplayName("изменять ожидаемую книгу")
     @Test
     void shouldUpdateBook() {
         var expectedGenre = em.find(Genre.class, EXPECTED_ROMAN_GENRE_ID);
@@ -159,42 +154,11 @@ public class BookRepositoryJpaTest {
         assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
-    @DisplayName("удалять ожидаемую книгу в БД")
+    @DisplayName("удалять ожидаемую книгу")
     @Test
     void shouldDeleteBook() {
         bookRepositoryJpa.deleteById(EXPECTED_BOOK_ROMAN_ID);
         var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_ROMAN_ID);
         assertThat(actualBook).isEmpty();
-    }
-
-    @DisplayName("добавлять ожидаемый комментарий к книге в БД")
-    @Test
-    void shouldAddCommentToBook() {
-        var expectedBook = em.find(Book.class, EXPECTED_BOOK_ROMAN_ID);
-        expectedBook.getComments().add(new Comment(0, EXPECTED_NEW_COMMENT_TEXT));
-        bookRepositoryJpa.save(expectedBook);
-        expectedBook.getComments().get(0).setId(EXPECTED_NEW_COMMENT_ID);
-        var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_ROMAN_ID);
-        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
-    }
-
-    @DisplayName("изменять ожидаемый комментарий к книге в БД")
-    @Test
-    void shouldUpdateBookComment() {
-        var expectedBook = em.find(Book.class, EXPECTED_BOOK_ROMAN_ID);
-        expectedBook.getComments().get(0).setText(EXPECTED_UPDATE_COMMENT_TEXT);
-        bookRepositoryJpa.save(expectedBook);
-        var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_ROMAN_ID);
-        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
-    }
-
-    @DisplayName("удалять ожидаемый комментарий к книге в БД")
-    @Test
-    void shouldDeleteBookComment() {
-        var expectedBook = em.find(Book.class, EXPECTED_BOOK_STORY_ID);
-        expectedBook.getComments().remove(0);
-        bookRepositoryJpa.save(expectedBook);
-        var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_STORY_ID);
-        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
     }
 }

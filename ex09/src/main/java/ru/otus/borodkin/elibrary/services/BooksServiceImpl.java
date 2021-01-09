@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.models.Book;
-import ru.otus.borodkin.elibrary.models.Comment;
 import ru.otus.borodkin.elibrary.models.Genre;
 import ru.otus.borodkin.elibrary.repositories.BookRepository;
 
@@ -29,13 +28,6 @@ public class BooksServiceImpl implements BooksService {
                 .map(book -> book.getBookText() + "\n" + "Authors:\n\t" + book.getBookAuthorsText())
                 .collect(Collectors.joining("\n")) + "\n";
 
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public String getBookAllCommentsAsText(long bookId) throws EntityNotFoundException {
-        Book book = getBookById(bookId);
-        return book.getBookText() + "\n" + "Comments:\n\t" + book.getBookCommentsText();
     }
 
     @Override
@@ -72,25 +64,5 @@ public class BooksServiceImpl implements BooksService {
     @Transactional
     public void deleteBookById(long bookId) {
         bookRepository.deleteById(bookId);
-    }
-
-    @Override
-    @Transactional(rollbackFor = EntityNotFoundException.class)
-    public Book addCommentToBook(long bookId, String text) throws EntityNotFoundException {
-        Book book = getBookById(bookId);
-        book.getComments().add(new Comment(0, text));
-        return null;
-    }
-
-    @Override
-    @Transactional(rollbackFor = EntityNotFoundException.class)
-    public Book updateBookComment(long bookId, long commentId, String text) throws EntityNotFoundException {
-        return null;
-    }
-
-    @Override
-    @Transactional(rollbackFor = EntityNotFoundException.class)
-    public Book deleteBookComment(long bookId, long commentId) throws EntityNotFoundException {
-        return null;
     }
 }

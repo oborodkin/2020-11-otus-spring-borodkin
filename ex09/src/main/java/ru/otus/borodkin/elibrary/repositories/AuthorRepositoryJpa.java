@@ -2,9 +2,7 @@ package ru.otus.borodkin.elibrary.repositories;
 
 import org.springframework.stereotype.Repository;
 import ru.otus.borodkin.elibrary.models.Author;
-import ru.otus.borodkin.elibrary.models.Book;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
