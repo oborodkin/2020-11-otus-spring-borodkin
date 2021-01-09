@@ -8,11 +8,8 @@ import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.models.Book;
 import ru.otus.borodkin.elibrary.models.Comment;
 import ru.otus.borodkin.elibrary.models.Genre;
-import ru.otus.borodkin.elibrary.repositories.AuthorRepository;
 import ru.otus.borodkin.elibrary.repositories.BookRepository;
-import ru.otus.borodkin.elibrary.repositories.GenreRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,17 +17,25 @@ import java.util.stream.Collectors;
 @Service
 public class BooksServiceImpl implements BooksService {
     private final BookRepository bookRepository;
-    private final GenreRepository genreRepository;
-    private final AuthorRepository authorRepository;
+
+    private final GenresService genresService;
+    private final AuthorsService authorsService;
 
     @Override
     @Transactional(readOnly = true)
     public String getAllBooksAsText() {
-        var books = bookRepository.getAll();
+        List<Book> books = bookRepository.getAll();
         return books.stream()
-                .map(Book::getBookText)
-                .collect(Collectors.joining("\n"));
+                .map(book -> book.getBookText() + "\n" + "Authors:\n\t" + book.getBookAuthorsText())
+                .collect(Collectors.joining("\n")) + "\n";
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String getBookAllCommentsAsText(long bookId) throws EntityNotFoundException {
+        Book book = getBookById(bookId);
+        return book.getBookText() + "\n" + "Comments:\n\t" + book.getBookCommentsText();
     }
 
     @Override
@@ -44,25 +49,33 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = EntityNotFoundException.class)
     public Book insertBook(String title, long genreId, List<Long> authors) throws EntityNotFoundException {
-        Book book = makeBook(0, title, genreId, authors);
+        Genre genre = genresService.getGenreById(genreId);
+        List<Author> authorList = authorsService.getAuthorsByList(authors);
+        Book book = new Book(0, title, genre, authorList, null);
         bookRepository.save(book);
         return book;
     }
 
     @Override
+    @Transactional(rollbackFor = EntityNotFoundException.class)
     public void updateBook(long bookId, String title, long genreId, List<Long> authors) throws EntityNotFoundException {
-
-    }
-
-    @Override
-    public void deleteBookById(long bookId) throws EntityNotFoundException {
-
+        Book book = getBookById(bookId);
+        book.setTitle(title);
+        book.setGenre(genresService.getGenreById(genreId));
+        book.setAuthors(authorsService.getAuthorsByList(authors));
+        bookRepository.save(book);
     }
 
     @Override
     @Transactional
+    public void deleteBookById(long bookId) {
+        bookRepository.deleteById(bookId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = EntityNotFoundException.class)
     public Book addCommentToBook(long bookId, String text) throws EntityNotFoundException {
         Book book = getBookById(bookId);
         book.getComments().add(new Comment(0, text));
@@ -70,28 +83,14 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
+    @Transactional(rollbackFor = EntityNotFoundException.class)
     public Book updateBookComment(long bookId, long commentId, String text) throws EntityNotFoundException {
         return null;
     }
 
     @Override
+    @Transactional(rollbackFor = EntityNotFoundException.class)
     public Book deleteBookComment(long bookId, long commentId) throws EntityNotFoundException {
         return null;
-    }
-
-    private Book makeBook(long bookId, String title, long genreId, List<Long> authors) throws EntityNotFoundException {
-        var genre = genreRepository.getById(genreId);
-        if (genre.isEmpty()) {
-            throw new EntityNotFoundException("Не найден жанр с ID " + genreId, null);
-        }
-        List<Author> authorList = new ArrayList<>();
-        for (Long authorId : authors) {
-            var author = authorRepository.getById(authorId);
-            if (author.isEmpty()) {
-                throw new EntityNotFoundException("Не найден автор с ID " + authorId, null);
-            }
-            authorList.add(author.get());
-        }
-        return new Book(bookId, title, genre.get(), authorList, null);
     }
 }

@@ -68,7 +68,12 @@ public class BookRepositoryJpaTest {
     private static final long EXPECTED_NEW_BOOK_ID = 4;
     private static final String EXPECTED_NEW_BOOK_TITLE = "Книга 4";
 
-    private static final String EXPECTED_NEW_TITLE_FOR_BOOK = "Новое название";
+    private static final String EXPECTED_UPDATE_TITLE_FOR_BOOK = "Новое название";
+
+    private static final long EXPECTED_NEW_COMMENT_ID = 5;
+    private static final String EXPECTED_NEW_COMMENT_TEXT = "Новый комментарий для книги";
+
+    private static final String EXPECTED_UPDATE_COMMENT_TEXT = "Комментарий обновлён";
 
     @Autowired
     private BookRepositoryJpa bookRepositoryJpa;
@@ -148,7 +153,7 @@ public class BookRepositoryJpaTest {
         var expectedGenre = em.find(Genre.class, EXPECTED_ROMAN_GENRE_ID);
         var expectedAuthors = List.of(
                 em.find(Author.class, EXPECTED_AUTHOR_1_ID));
-        var expectedBook = new Book(EXPECTED_BOOK_STORY_ID, EXPECTED_NEW_TITLE_FOR_BOOK, expectedGenre, expectedAuthors, null);
+        var expectedBook = new Book(EXPECTED_BOOK_STORY_ID, EXPECTED_UPDATE_TITLE_FOR_BOOK, expectedGenre, expectedAuthors, null);
         bookRepositoryJpa.save(expectedBook);
         var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_STORY_ID);
         assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
@@ -162,19 +167,34 @@ public class BookRepositoryJpaTest {
         assertThat(actualBook).isEmpty();
     }
 
-
     @DisplayName("добавлять ожидаемый комментарий к книге в БД")
     @Test
     void shouldAddCommentToBook() {
-        var expectedBook = new Book(EXPECTED_BOOK_ROMAN_ID, EXPECTED_BOOK_ROMAN_TITLE,
-                new Genre(EXPECTED_BOOK_ROMAN_GENRE_ID, EXPECTED_BOOK_ROMAN_GENRE_NAME),
-                List.of(new Author(EXPECTED_BOOK_ROMAN_AUTHOR_ID, EXPECTED_BOOK_ROMAN_AUTHOR_FULLNAME)),
-                List.of(new Comment(0, "Новый комментарий для книги"))
-        );
+        var expectedBook = em.find(Book.class, EXPECTED_BOOK_ROMAN_ID);
+        expectedBook.getComments().add(new Comment(0, EXPECTED_NEW_COMMENT_TEXT));
+        bookRepositoryJpa.save(expectedBook);
+        expectedBook.getComments().get(0).setId(EXPECTED_NEW_COMMENT_ID);
+        var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_ROMAN_ID);
+        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
+    }
+
+    @DisplayName("изменять ожидаемый комментарий к книге в БД")
+    @Test
+    void shouldUpdateBookComment() {
+        var expectedBook = em.find(Book.class, EXPECTED_BOOK_ROMAN_ID);
+        expectedBook.getComments().get(0).setText(EXPECTED_UPDATE_COMMENT_TEXT);
         bookRepositoryJpa.save(expectedBook);
         var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_ROMAN_ID);
         assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
-
     }
 
+    @DisplayName("удалять ожидаемый комментарий к книге в БД")
+    @Test
+    void shouldDeleteBookComment() {
+        var expectedBook = em.find(Book.class, EXPECTED_BOOK_STORY_ID);
+        expectedBook.getComments().remove(0);
+        bookRepositoryJpa.save(expectedBook);
+        var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_STORY_ID);
+        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
+    }
 }

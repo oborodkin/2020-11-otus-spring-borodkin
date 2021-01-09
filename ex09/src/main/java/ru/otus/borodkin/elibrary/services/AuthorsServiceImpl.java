@@ -3,6 +3,7 @@ package ru.otus.borodkin.elibrary.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.repositories.AuthorRepository;
 
@@ -21,5 +22,14 @@ public class AuthorsServiceImpl implements AuthorsService {
         return authors.stream()
                 .map(Author::getAuthorText)
                 .collect(Collectors.joining("\n"));
+    }
+
+    @Override
+    public List<Author> getAuthorsByList(List<Long> authors) throws EntityNotFoundException {
+        var authorsList = authorRepository.getByList(authors);
+        if (authorsList.size() != authors.size()) {
+            throw new EntityNotFoundException("Указанные авторы не найдены", null);
+        }
+        return authorsList;
     }
 }

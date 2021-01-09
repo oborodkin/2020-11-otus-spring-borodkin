@@ -26,19 +26,21 @@ public class Book {
     private String title;
 
     @OneToOne(targetEntity = Genre.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "genre_id")
+    @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
     @Fetch(FetchMode.SELECT)
     @BatchSize(size = 10)
     @ManyToMany(targetEntity = Author.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "books_authors", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @JoinTable(name = "books_authors",
+            joinColumns = @JoinColumn(name = "book_id", nullable = false, updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false, updatable = false))
     private List<Author> authors;
 
     @Fetch(FetchMode.SELECT)
     @BatchSize(size = 10)
     @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false, updatable = false)
     private List<Comment> comments;
 
     public String getBookAuthorsText() {
@@ -47,7 +49,13 @@ public class Book {
                 .collect(Collectors.joining("\n\t"));
     }
 
+    public String getBookCommentsText() {
+        return comments.stream()
+                .map(Comment::getCommentText)
+                .collect(Collectors.joining("\n\t"));
+    }
+
     public String getBookText() {
-        return "ID: " + id + ", '" + title + "', " + genre.getName() + "\n" + "Authors:\n\t" + getBookAuthorsText();
+        return "ID: " + id + ", '" + title + "', " + genre.getName();
     }
 }

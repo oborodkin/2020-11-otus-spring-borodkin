@@ -26,4 +26,11 @@ public class AuthorRepositoryJpa implements AuthorRepository {
         TypedQuery<Author> query = em.createQuery("select a from Author a", Author.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<Author> getByList(List<Long> authors) {
+        TypedQuery<Author> query = em.createQuery("select a from Author a where a.id in :authors", Author.class);
+        query.setParameter("authors", authors);
+        return query.getResultList();
+    }
 }

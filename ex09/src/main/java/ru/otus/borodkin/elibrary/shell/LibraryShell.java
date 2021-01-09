@@ -34,12 +34,10 @@ public class LibraryShell {
         return booksService.getAllBooksAsText();
     }
 
-/*
     @ShellMethod(value = "Show book comments: <BOOK ID>", key = {"c", "comments"})
     public String showAllBookComments(long bookId) throws EntityNotFoundException {
-        return commentsService.getAllCommentsAsTextByBookId(bookId);
+        return booksService.getBookAllCommentsAsText(bookId);
     }
- */
 
     @ShellMethod(value = "Insert book: \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bi", "insert book"})
     public String insertBook(String title, long genreId, String authors) throws EntityNotFoundException {
@@ -51,27 +49,25 @@ public class LibraryShell {
         return "Книга добавлена";
     }
 
-/*
-    @ShellMethod(value = "Update book: <BOOK ID> \"<TITLE>\" <GENRE ID> <AUTHOR ID>", key = {"bu", "update book"})
-    public String updateBook(int bookId, String title, int genreId, int authorId) throws EntityNotFoundException {
-        booksService.updateBook(bookId, title, genreId, authorId);
+    @ShellMethod(value = "Update book: <BOOK ID> \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bu", "update book"})
+    public String updateBook(int bookId, String title, int genreId, String authors) throws EntityNotFoundException {
+        List<Long> authorsList = Stream.of(authors.split(","))
+                .map(String::trim)
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        booksService.updateBook(bookId, title, genreId, authorsList);
         return "Данные по книге обновлены";
     }
 
     @ShellMethod(value = "Delete book: <BOOK ID>", key = {"bd", "delete book"})
-    public String deleteBook(int bookId) {
+    public String deleteBook(int bookId)  {
         booksService.deleteBookById(bookId);
         return "Книга удалена";
     }
 
- */
-
-/*
-    @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "add comment"})
-    public String addCommentToBook(long bookId, String text) {
-        commentsService.insertComment(bookId, text);
+    @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "comment add"})
+    public String addCommentToBook(long bookId, String text) throws EntityNotFoundException {
+        booksService.addCommentToBook(bookId, text);
         return "Комментарий добавлен";
     }
-
- */
 }
