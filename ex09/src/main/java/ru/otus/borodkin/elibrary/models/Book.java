@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "books")
 @NamedEntityGraph(name = "book-genre", attributeNodes = {@NamedAttributeNode("genre")})
+@NamedEntityGraph(name = "book-authors", attributeNodes = {@NamedAttributeNode("authors")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +30,6 @@ public class Book {
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 10)
     @ManyToMany(targetEntity = Author.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id", nullable = false, updatable = false),
