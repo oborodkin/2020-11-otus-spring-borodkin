@@ -46,17 +46,6 @@ class CommentRepositoryJpaTest {
         assertThat(actualComment).isPresent().get().usingRecursiveComparison().isEqualTo(expectedComment);
     }
 
-    @DisplayName("возвращать все ожидаемые комментарии по id книги")
-    @Test
-    void shouldReturnExpectedCommentByBookId() {
-        var expectedComments = List.of(
-                new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
-                new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
-        );
-        var actualComments = commentRepositoryJpa.getByBook(EXPECTED_BOOK_STORY_ID);
-        assertThat(actualComments).hasSize(expectedComments.size()).hasSameElementsAs(expectedComments);
-    }
-
     @DisplayName("добавлять ожидаемый комментарий")
     @Test
     void shouldInsertComment() {
@@ -78,7 +67,8 @@ class CommentRepositoryJpaTest {
     @DisplayName("удалять ожидаемый комментарий")
     @Test
     void shouldDeleteComment() {
-        commentRepositoryJpa.deleteById(EXPECTED_DELETE_COMMENT_ID);
+        var expectedComment = em.find(Comment.class, EXPECTED_DELETE_COMMENT_ID);
+        commentRepositoryJpa.delete(expectedComment);
         var actualComment = commentRepositoryJpa.getById(EXPECTED_DELETE_COMMENT_ID);
         assertThat(actualComment).isEmpty();
     }

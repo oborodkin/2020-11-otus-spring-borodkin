@@ -5,9 +5,6 @@ import ru.otus.borodkin.elibrary.models.Comment;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,13 +15,6 @@ public class CommentRepositoryJpa implements CommentRepository {
     @Override
     public Optional<Comment> getById(long id) {
         return Optional.ofNullable(em.find(Comment.class, id));
-    }
-
-    @Override
-    public List<Comment> getByBook(long bookId) {
-        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.bookId = :book_id", Comment.class);
-        query.setParameter("book_id", bookId);
-        return query.getResultList();
     }
 
     @Override
@@ -39,9 +29,7 @@ public class CommentRepositoryJpa implements CommentRepository {
     }
 
     @Override
-    public void deleteById(long id) {
-        Query query = em.createQuery("delete from Comment c where c.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+    public void delete(Comment comment) {
+        em.remove(comment);
     }
 }

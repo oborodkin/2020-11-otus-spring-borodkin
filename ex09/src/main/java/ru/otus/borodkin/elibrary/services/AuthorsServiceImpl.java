@@ -25,7 +25,7 @@ public class AuthorsServiceImpl implements AuthorsService {
     }
 
     @Override
-    public List<Author> getAuthorsByList(List<Long> authors) throws EntityNotFoundException {
+    public List<Author> getAuthorsByList(List<Long> authors) {
         var authorsList = authorRepository.getByList(authors);
         if (authorsList.size() != authors.size()) {
             throw new EntityNotFoundException("Указанные авторы не найдены", null);

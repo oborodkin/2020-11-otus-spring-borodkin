@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface BooksService {
     String getAllBooksAsText();
-    Book getBookById(long bookId) throws EntityNotFoundException ;
-    Book insertBook(String title, long genreId, List<Long> authors) throws EntityNotFoundException;
-    void updateBook(long bookId, String title, long genreId, List<Long> authors) throws EntityNotFoundException;
+    Book getBookById(long bookId);
+    Book insertBook(String title, long genreId, List<Long> authors);
+    void updateBook(long bookId, String title, long genreId, List<Long> authors);
     void deleteBookById(long bookId);
 }

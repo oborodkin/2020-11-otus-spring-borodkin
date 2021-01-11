@@ -25,7 +25,7 @@ public class GenresServiceImpl implements GenresService {
     }
 
     @Override
-    public Genre getGenreById(long genreId) throws EntityNotFoundException {
+    public Genre getGenreById(long genreId) {
         var genre = genreRepository.getById(genreId);
         if (genre.isEmpty()) {
             throw new EntityNotFoundException("Жанр с ID " + genreId + " не найден", null);

@@ -32,7 +32,7 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     @Transactional(readOnly = true)
-    public Book getBookById(long bookId) throws EntityNotFoundException {
+    public Book getBookById(long bookId){
         var book = bookRepository.getById(bookId);
         if (book.isEmpty()) {
             throw new EntityNotFoundException("Книга с ID " + bookId + " не найдена", null);
@@ -42,7 +42,7 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     @Transactional(rollbackFor = EntityNotFoundException.class)
-    public Book insertBook(String title, long genreId, List<Long> authors) throws EntityNotFoundException {
+    public Book insertBook(String title, long genreId, List<Long> authors) {
         Genre genre = genresService.getGenreById(genreId);
         List<Author> authorList = authorsService.getAuthorsByList(authors);
         Book book = new Book(0, title, genre, authorList, null);
@@ -52,7 +52,7 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     @Transactional(rollbackFor = EntityNotFoundException.class)
-    public void updateBook(long bookId, String title, long genreId, List<Long> authors) throws EntityNotFoundException {
+    public void updateBook(long bookId, String title, long genreId, List<Long> authors) {
         Book book = getBookById(bookId);
         book.setTitle(title);
         book.setGenre(genresService.getGenreById(genreId));

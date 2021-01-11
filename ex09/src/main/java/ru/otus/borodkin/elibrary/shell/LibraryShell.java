@@ -37,13 +37,13 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Show book comments: <BOOK ID>", key = {"c", "comments"})
-    public String showAllBookComments(long bookId) throws EntityNotFoundException {
+    public String showAllBookComments(long bookId) {
         return commentsService.getAllCommentsAsTextByBookId(bookId);
         //return booksService.getBookAllCommentsAsText(bookId);
     }
 
     @ShellMethod(value = "Insert book: \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bi", "insert book"})
-    public String insertBook(String title, long genreId, String authors) throws EntityNotFoundException {
+    public String insertBook(String title, long genreId, String authors) {
         List<Long> authorsList = Stream.of(authors.split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
@@ -53,7 +53,7 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Update book: <BOOK ID> \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bu", "update book"})
-    public String updateBook(int bookId, String title, int genreId, String authors) throws EntityNotFoundException {
+    public String updateBook(int bookId, String title, int genreId, String authors) {
         List<Long> authorsList = Stream.of(authors.split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
@@ -69,13 +69,13 @@ public class LibraryShell {
     }
 
     @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "comment add"})
-    public String addCommentToBook(long bookId, String text) throws EntityNotFoundException {
+    public String addCommentToBook(long bookId, String text) {
         commentsService.insertComment(bookId, text);
         return "Комментарий добавлен";
     }
 
     @ShellMethod(value = "Update comment to book: <COMMENT_ID> \"<TEXT>\"", key = {"cu", "comment update"})
-    public String updateCommentToBook(long commentId, String text) throws EntityNotFoundException {
+    public String updateCommentToBook(long commentId, String text) {
         commentsService.updateComment(commentId, text);
         return "Комментарий изменён";
     }

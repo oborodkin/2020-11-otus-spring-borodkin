@@ -18,9 +18,9 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional(readOnly = true)
-    public String getAllCommentsAsTextByBookId(long bookId) throws EntityNotFoundException {
+    public String getAllCommentsAsTextByBookId(long bookId) {
         var book = booksService.getBookById(bookId);
-        var comments = commentRepository.getByBook(bookId);
+        var comments = book.getComments();
         if (comments.size() > 0) {
             return book.getBookText() + "\n" +
                     "Comments:\n\t" +
@@ -34,7 +34,7 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Comment getCommentById(long commentId) throws EntityNotFoundException {
+    public Comment getCommentById(long commentId) {
         var comment = commentRepository.getById(commentId);
         if (comment.isEmpty()) {
             throw new EntityNotFoundException("Комментарий с ID " + commentId + " не найден", null);
@@ -44,7 +44,7 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
-    public Comment insertComment(long bookId, String text) throws EntityNotFoundException {
+    public Comment insertComment(long bookId, String text) {
         // для проверки наличия книги
         var book = booksService.getBookById(bookId);
         Comment comment = new Comment(0, bookId, text);
@@ -53,7 +53,7 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional(rollbackFor = EntityNotFoundException.class)
-    public void updateComment(long commentId, String text) throws EntityNotFoundException {
+    public void updateComment(long commentId, String text) {
         var comment = getCommentById(commentId);
         comment.setText(text);
         commentRepository.save(comment);
@@ -62,6 +62,7 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @Transactional
     public void deleteCommentById(long commentId) {
-        commentRepository.deleteById(commentId);
+        var comment = getCommentById(commentId);
+        commentRepository.delete(comment);
     }
 }

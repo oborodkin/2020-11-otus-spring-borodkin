@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AuthorsService {
     String getAllAuthorsAsText();
-    List<Author> getAuthorsByList(List<Long> authors) throws EntityNotFoundException;
+    List<Author> getAuthorsByList(List<Long> authors);
 }
