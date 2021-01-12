@@ -29,7 +29,7 @@ create table books_authors
     book_id bigint not null,
     author_id bigint not null,
     primary key (book_id, author_id),
-    foreign key(book_id) references books(id) on delete cascade,
+    foreign key(book_id) references books(id), --on delete cascade,
     foreign key(author_id) references authors(id)
 );
 
@@ -38,5 +38,5 @@ create table books_comments
     id bigint identity,
     book_id bigint not null,
     comment_text varchar(255) not null,
-    foreign key(book_id) references books(id) on delete cascade
+    foreign key(book_id) references books(id) --on delete cascade
 );

@@ -26,11 +26,11 @@ public class Book {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @OneToOne(targetEntity = Genre.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Genre.class)
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
-    @ManyToMany(targetEntity = Author.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Author.class, fetch = FetchType.LAZY)
     @JoinTable(name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id", nullable = false, updatable = false),
             inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false, updatable = false))

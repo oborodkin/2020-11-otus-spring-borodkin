@@ -9,5 +9,5 @@ public interface BookRepository {
     Optional<Book> getById(long id);
     List<Book> getAll();
     Book save(Book book);
-    void deleteById(long id);
+    void delete(Book book);
 }

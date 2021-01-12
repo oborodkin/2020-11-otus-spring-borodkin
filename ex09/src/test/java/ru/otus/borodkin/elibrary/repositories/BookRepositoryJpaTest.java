@@ -157,7 +157,8 @@ public class BookRepositoryJpaTest {
     @DisplayName("удалять ожидаемую книгу")
     @Test
     void shouldDeleteBook() {
-        bookRepositoryJpa.deleteById(EXPECTED_BOOK_ROMAN_ID);
+        var expectedBook = em.find(Book.class, EXPECTED_BOOK_ROMAN_ID);
+        bookRepositoryJpa.delete(expectedBook);
         var actualBook = bookRepositoryJpa.getById(EXPECTED_BOOK_ROMAN_ID);
         assertThat(actualBook).isEmpty();
     }
