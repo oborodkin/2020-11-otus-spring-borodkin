@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      database: e_lib_db
+      port: 27017
+      host: localhost
