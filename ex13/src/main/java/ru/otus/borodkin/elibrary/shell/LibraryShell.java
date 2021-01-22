@@ -40,19 +40,18 @@ public class LibraryShell {
         return commentsService.getAllCommentsAsTextByBookId(bookId);
     }
 
+
     @ShellMethod(value = "Insert author: \"<FULL NAME>\"", key = {"ai", "insert author"})
     public String insertAuthor(String fullName) {
         authorsService.insert(fullName);
         return "Автор добавлен";
     }
 
-
     @ShellMethod(value = "Insert genre: \"<NAME>\"", key = {"gi", "insert genre"})
     public String insertGenre(String name) {
         genresService.insert(name);
         return "Жанр добавлен";
     }
-
 
     @ShellMethod(value = "Insert book: \"<TITLE>\" <GENRE ID> \"<AUTHOR ID>, <AUTHOR ID>, ...\"", key = {"bi", "insert book"})
     public String insertBook(String title, String genreId, String authors) {
@@ -78,30 +77,21 @@ public class LibraryShell {
         return "Книга удалена";
     }
 
-    @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "comment add"})
-    public String addCommentToBook(String bookId, String text) {
+    @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ci", "comment inert"})
+    public String insertComment(String bookId, String text) {
         commentsService.insert(bookId, text);
         return "Комментарий добавлен";
     }
 
-/*
-    @ShellMethod(value = "Add comment to book: <BOOK_ID> \"<TEXT>\"", key = {"ca", "comment add"})
-    public String addCommentToBook(String bookId, String text) {
-        commentsService.insertComment(bookId, text);
-        return "Комментарий добавлен";
-    }
-
     @ShellMethod(value = "Update comment to book: <COMMENT_ID> \"<TEXT>\"", key = {"cu", "comment update"})
-    public String updateCommentToBook(String commentId, String text) {
+    public String updateComment(String commentId, String text) {
         commentsService.updateComment(commentId, text);
         return "Комментарий изменён";
     }
 
     @ShellMethod(value = "Delete comment to book: <COMMENT_ID> \"<TEXT>\"", key = {"cd", "comment delete"})
-    public String deleteCommentToBook(String commentId) {
+    public String deleteComment(String commentId) {
         commentsService.deleteCommentById(commentId);
         return "Комментарий удалён";
     }
-
- */
 }

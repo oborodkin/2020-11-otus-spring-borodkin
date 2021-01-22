@@ -19,16 +19,16 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public Comment insert(String bookId, String text) {
-        var comment = new Comment(null, text);
+        var book = booksService.getBookById(bookId);
+        var comment = new Comment(null, book, text);
         commentRepository.save(comment);
-        booksService.addCommentToBook(bookId, comment);
         return comment;
     }
 
     @Override
     public String getAllCommentsAsTextByBookId(String bookId) {
         var book = booksService.getBookById(bookId);
-        var comments = book.getComments();
+        var comments = commentRepository.findAllByBook_Id(bookId);
         if (comments.size() > 0) {
             return book.getBookText() + "\n" +
                     "Comments:\n\t" +
@@ -40,37 +40,25 @@ public class CommentsServiceImpl implements CommentsService {
         }
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public Comment getCommentById(String commentId) {
-//        var comment = commentRepository.findById(commentId);
-//        if (comment.isEmpty()) {
-//            throw new EntityNotFoundException("Комментарий с ID " + commentId + " не найден", null);
-//        }
-//        return comment.get();
-//    }
+    @Override
+    public Comment getCommentById(String commentId) {
+        var comment = commentRepository.findById(commentId);
+        if (comment.isEmpty()) {
+            throw new EntityNotFoundException("Комментарий с ID " + commentId + " не найден", null);
+        }
+        return comment.get();
+    }
 
-//    @Override
-//    @Transactional
-//    public Comment insertComment(String bookId, String text) {
-//        // для проверки наличия книги
-//        var book = booksService.getBookById(bookId);
-//        Comment comment = new Comment(null, bookId, text);
-//        return commentRepository.save(comment);
-//    }
+    @Override
+    public void updateComment(String commentId, String text) {
+        var comment = getCommentById(commentId);
+        comment.setText(text);
+        commentRepository.save(comment);
+    }
 
-//    @Override
-//    @Transactional(rollbackFor = EntityNotFoundException.class)
-//    public void updateComment(String commentId, String text) {
-//        var comment = getCommentById(commentId);
-//        comment.setText(text);
-//        commentRepository.save(comment);
-//    }
-
-//    @Override
-//    @Transactional
-//    public void deleteCommentById(String commentId) {
-//        var comment = getCommentById(commentId);
-//        commentRepository.delete(comment);
-//    }
+    @Override
+    public void deleteCommentById(String commentId) {
+        var comment = getCommentById(commentId);
+        commentRepository.delete(comment);
+    }
 }

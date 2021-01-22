@@ -24,9 +24,6 @@ public class Book {
 
     private List<Author> authors;
 
-    @DBRef(db = "comments")
-    private List<Comment> comments;
-
     public String getBookAuthorsText() {
         return authors.stream()
                 .map(Author::getAuthorText)

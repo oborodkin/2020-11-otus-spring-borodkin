@@ -46,7 +46,7 @@ public class BooksServiceImpl implements BooksService {
     public Book insertBook(String title, String genreId, List<String> authors) {
         Genre genre = genresService.getGenreById(genreId);
         List<Author> authorList = authorsService.getAuthorsByList(authors);
-        Book book = new Book(null, title, genre, authorList, null);
+        Book book = new Book(null, title, genre, authorList);
         bookRepository.save(book);
         return book;
     }
@@ -58,17 +58,6 @@ public class BooksServiceImpl implements BooksService {
         book.setTitle(title);
         book.setGenre(genresService.getGenreById(genreId));
         book.setAuthors(authorsService.getAuthorsByList(authors));
-        bookRepository.save(book);
-    }
-
-    @Override
-    public void addCommentToBook(String bookId, Comment comment) {
-        Book book = getBookById(bookId);
-        if (book.getComments() != null) {
-            book.getComments().add(comment);
-        } else {
-            book.setComments(List.of(comment));
-        }
         bookRepository.save(book);
     }
 
