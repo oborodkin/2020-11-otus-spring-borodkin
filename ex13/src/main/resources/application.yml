@@ -4,3 +4,8 @@ spring:
       database: e_lib_db
       port: 27017
       host: localhost
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.borodkin.elibrary.changelogs

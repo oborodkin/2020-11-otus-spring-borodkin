@@ -2,7 +2,6 @@ package ru.otus.borodkin.elibrary.services;
 
 import ru.otus.borodkin.elibrary.models.Book;
 import ru.otus.borodkin.elibrary.models.BookTitle;
-import ru.otus.borodkin.elibrary.models.Comment;
 
 import java.util.List;
 
