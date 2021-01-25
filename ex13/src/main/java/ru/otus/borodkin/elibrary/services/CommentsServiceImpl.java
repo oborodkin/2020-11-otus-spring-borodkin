@@ -2,13 +2,10 @@ package ru.otus.borodkin.elibrary.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import ru.otus.borodkin.elibrary.models.Comment;
-import ru.otus.borodkin.elibrary.repositories.BookRepository;
 import ru.otus.borodkin.elibrary.repositories.CommentRepository;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -19,24 +16,23 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public Comment insert(String bookId, String text) {
-        var book = booksService.getBookById(bookId);
-        var comment = new Comment(null, book, text);
+        var bookTitle = booksService.getBookTitleById(bookId);
+        var comment = new Comment(null, bookTitle, text);
         commentRepository.save(comment);
         return comment;
     }
 
     @Override
     public String getAllCommentsAsTextByBookId(String bookId) {
-        var book = booksService.getBookById(bookId);
         var comments = commentRepository.findAllByBook_Id(bookId);
         if (comments.size() > 0) {
-            return book.getBookText() + "\n" +
+            return comments.get(0).getBook().getBookText() + "\n" +
                     "Comments:\n\t" +
                     comments.stream()
                             .map(Comment::getCommentText)
                             .collect(Collectors.joining("\n\t"));
         } else {
-            return book.getBookText() + "\n" + "По книге нет комментариев";
+            return "По книге нет комментариев";
         }
     }
 

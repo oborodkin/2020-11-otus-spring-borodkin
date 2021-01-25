@@ -2,7 +2,6 @@ package ru.otus.borodkin.elibrary.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
 import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.repositories.AuthorRepository;

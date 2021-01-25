@@ -4,22 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Сокращённый вариант представления книги
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Document(collection = "comments")
-public class Comment {
+public class BookTitle {
     @Id
     private String id;
 
-    private BookTitle book;
+    private String title;
 
-    private String text;
-
-    public String getCommentText() {
-        return "ID: " + id + ", " + text;
+    public String getBookText() {
+        return "ID: " + id + ", '" + title + "'";
     }
-
 }
