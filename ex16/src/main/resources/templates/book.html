@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Книга</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">E-Library</a>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/books">Книги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/authors">Авторы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/genres">Жанры<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputBookTitle">Название книги</label>
+                <input type="text" class="form-control" id="inputBookTitle" th:field="${book.title}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputBookGenre">Жанр</label>
+                <select class="form-control" id="inputBookGenre" th:field="*{book.genre.id}">
+                    <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"
+                            th:selected="${genre.id==book.genre.id}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputBookAuthor">Добавить автора</label>
+                <div class="input-group mb-3" id="inputBookAuthor">
+                    <select class="form-control">
+                        <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.fullName}"
+                        </option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">Добавить</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-row col-md-12">
+            <div class="form-group col-md-12">
+                <label for="authorsListGroup">Авторы</label>
+                <table class="table table-sm" id="authorsListGroup">
+                    <tbody>
+                    <tr th:each="author : ${book.authors}">
+                        <td th:text="${author.fullName}">Book author full name</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style=".mt-5">Sign in</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
