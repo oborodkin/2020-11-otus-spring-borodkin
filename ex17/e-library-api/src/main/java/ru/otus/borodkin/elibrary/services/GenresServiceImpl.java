@@ -1,40 +1,44 @@
 package ru.otus.borodkin.elibrary.services;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.borodkin.elibrary.exceptions.EntityNotFoundException;
+import ru.otus.borodkin.elibrary.dto.GenreDto;
 import ru.otus.borodkin.elibrary.models.Genre;
 import ru.otus.borodkin.elibrary.repositories.GenreRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class GenresServiceImpl implements GenresService {
     private final GenreRepository genreRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public String getAllGenresAsText() {
-        var genres = genreRepository.findAll();
-        return genres.stream()
-                .map(Genre::getGenreText)
-                .collect(Collectors.joining("\n"));
+    public Optional<Genre> findById(long genreId) {
+        return genreRepository.findById(genreId);
     }
 
     @Override
-    public Genre getGenreById(long genreId) {
-        var genre = genreRepository.findById(genreId);
-        if (genre.isEmpty()) {
-            throw new EntityNotFoundException("Жанр с ID " + genreId + " не найден", null);
+    @Transactional(readOnly = true)
+    public GenreDto findDtoById(long genreId) {
+        var optionalGenre = this.findById(genreId);
+        if (optionalGenre.isPresent()) {
+            return modelMapper.map(optionalGenre.get(), GenreDto.class);
+        } else {
+            return null;
         }
-        return genre.get();
     }
 
     @Override
-    public List<Genre> findAll() {
-        return genreRepository.findAll();
+    @Transactional(readOnly = true)
+    public Page<GenreDto> findAll(Pageable pageable) {
+        var genres = genreRepository.findAll(pageable);
+        return genres.map(genre -> modelMapper.map(genre, GenreDto.class));
     }
 }

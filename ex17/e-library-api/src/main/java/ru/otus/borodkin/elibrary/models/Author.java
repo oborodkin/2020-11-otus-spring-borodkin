@@ -18,8 +18,4 @@ public class Author {
 
     @Column(name = "full_name", nullable = false, unique = true)
     private String fullName;
-
-    public String getAuthorText(){
-        return "ID: " + id + ", " + fullName;
-    }
 }

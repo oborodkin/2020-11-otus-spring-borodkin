@@ -16,14 +16,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "book_id", nullable = false, updatable = false)
-    private long bookId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     @Column(name = "comment_text", nullable = false)
     private String text;
-
-    public String getCommentText(){
-        return "ID: " + id + ", " + text;
-    }
-
 }

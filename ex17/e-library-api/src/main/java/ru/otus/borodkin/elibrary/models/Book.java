@@ -3,13 +3,9 @@ package ru.otus.borodkin.elibrary.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,19 +34,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false, updatable = false))
     private List<Author> authors;
 
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 10)
-    @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id", nullable = false, updatable = false, insertable = false)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
     private List<Comment> comments;
-
-    public String getBookAuthorsText() {
-        return authors.stream()
-                .map(Author::getAuthorText)
-                .collect(Collectors.joining("\n\t"));
-    }
-
-    public String getBookText() {
-        return "ID: " + id + ", '" + title + "', " + genre.getName();
-    }
 }

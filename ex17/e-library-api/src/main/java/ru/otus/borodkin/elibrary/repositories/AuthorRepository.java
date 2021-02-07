@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     List<Author> findAuthorsByIdIn(List<Long> authors);
-    List<Author> findAll();
+
+    Page<Author> findAll(Pageable pageable);
 }

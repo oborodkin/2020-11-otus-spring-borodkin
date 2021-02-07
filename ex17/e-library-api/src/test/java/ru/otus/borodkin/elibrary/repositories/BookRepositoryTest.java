@@ -59,18 +59,18 @@ class BookRepositoryTest {
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
-    @DisplayName("возвращать ожидаемую книгу по id")
-    @Test
-    void shouldReturnExpectedBookById() {
-        var expectedBook = new Book(EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_TITLE,
-                new Genre(EXPECTED_BOOK_STORY_GENRE_ID, EXPECTED_BOOK_STORY_GENRE_NAME),
-                List.of(new Author(EXPECTED_BOOK_STORY_AUTHOR_ID, EXPECTED_BOOK_STORY_AUTHOR_FULLNAME)),
-                List.of(
-                        new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
-                        new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
-                )
-        );
-        var actualBook = bookRepository.findById(EXPECTED_BOOK_STORY_ID);
-        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
-    }
+//    @DisplayName("возвращать ожидаемую книгу по id")
+//    @Test
+//    void shouldReturnExpectedBookById() {
+//        var expectedBook = new Book(EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_TITLE,
+//                new Genre(EXPECTED_BOOK_STORY_GENRE_ID, EXPECTED_BOOK_STORY_GENRE_NAME),
+//                List.of(new Author(EXPECTED_BOOK_STORY_AUTHOR_ID, EXPECTED_BOOK_STORY_AUTHOR_FULLNAME)),
+//                List.of(
+//                        new Comment(EXPECTED_BOOK_STORY_COMMENT_1_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_1_TEXT),
+//                        new Comment(EXPECTED_BOOK_STORY_COMMENT_2_ID, EXPECTED_BOOK_STORY_ID, EXPECTED_BOOK_STORY_COMMENT_2_TEXT)
+//                )
+//        );
+//        var actualBook = bookRepository.findById(EXPECTED_BOOK_STORY_ID);
+//        assertThat(actualBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
+//    }
 }

@@ -18,8 +18,4 @@ public class Genre {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    public String getGenreText(){
-        return "ID: " + id + ", " + name;
-    }
 }
