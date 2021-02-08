@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Slf4j
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
 public class RestException extends RuntimeException {
     public RestException() {
@@ -13,7 +12,6 @@ public class RestException extends RuntimeException {
 
     public RestException(String message) {
         super(message);
-        log.error("RestException: " + message);
     }
 
     public RestException(String message, Throwable cause) {

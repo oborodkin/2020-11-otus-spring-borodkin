@@ -15,5 +15,5 @@ public interface AuthorsService {
 
     AuthorDto findDtoById(long authorId);
 
-    Page<AuthorDto> findAll(Pageable pageable);
+    List<AuthorDto> findAll();
 }

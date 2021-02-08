@@ -1,8 +1,6 @@
 package ru.otus.borodkin.elibrary.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.borodkin.elibrary.dto.BookDto;
@@ -19,8 +17,8 @@ public class BooksController {
     private final CommentsService commentsService;
 
     @GetMapping("/rest/books")
-    public Page<BookDto> get(Pageable pageable) {
-        return booksService.findAll(pageable);
+    public List<BookDto> get() {
+        return booksService.findAll();
     }
 
     @GetMapping("/rest/books/{bookId}")
@@ -53,10 +51,9 @@ public class BooksController {
     }
 
     @GetMapping("/rest/books/{bookId}/comments")
-    public Page<CommentDto> getBookComments(
-            Pageable pageable,
+    public List<CommentDto> getBookComments(
             @PathVariable(value = "bookId") Long bookId) {
-        return commentsService.findByBookId(pageable, bookId);
+        return commentsService.findByBookId(bookId);
     }
 
     @PostMapping("/rest/books/{bookId}/comments")

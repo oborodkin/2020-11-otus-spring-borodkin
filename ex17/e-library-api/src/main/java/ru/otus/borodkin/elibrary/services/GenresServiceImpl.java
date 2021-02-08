@@ -2,8 +2,6 @@ package ru.otus.borodkin.elibrary.services;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.GenreDto;
@@ -11,7 +9,9 @@ import ru.otus.borodkin.elibrary.exceptions.RestNotFoundException;
 import ru.otus.borodkin.elibrary.models.Genre;
 import ru.otus.borodkin.elibrary.repositories.GenreRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,8 +34,11 @@ public class GenresServiceImpl implements GenresService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<GenreDto> findAll(Pageable pageable) {
-        var genres = genreRepository.findAll(pageable);
-        return genres.map(genre -> modelMapper.map(genre, GenreDto.class));
+    public List<GenreDto> findAll() {
+        var genres = genreRepository.findAll();
+        return genres
+                .stream()
+                .map(genre -> modelMapper.map(genre, GenreDto.class))
+                .collect(Collectors.toList());
     }
 }

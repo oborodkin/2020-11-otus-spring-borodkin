@@ -2,8 +2,6 @@ package ru.otus.borodkin.elibrary.services;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.AuthorDto;
@@ -14,6 +12,7 @@ import ru.otus.borodkin.elibrary.repositories.AuthorRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -45,8 +44,11 @@ public class AuthorsServiceImpl implements AuthorsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<AuthorDto> findAll(Pageable pageable) {
-        var authors = authorRepository.findAll(pageable);
-        return authors.map(author -> modelMapper.map(author, AuthorDto.class));
+    public List<AuthorDto> findAll() {
+        var authors = authorRepository.findAll();
+        return authors
+                .stream()
+                .map(author -> modelMapper.map(author, AuthorDto.class))
+                .collect(Collectors.toList());
     }
 }

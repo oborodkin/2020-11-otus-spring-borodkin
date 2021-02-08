@@ -2,8 +2,6 @@ package ru.otus.borodkin.elibrary.services;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.CommentDto;
@@ -12,7 +10,9 @@ import ru.otus.borodkin.elibrary.exceptions.RestNotFoundException;
 import ru.otus.borodkin.elibrary.models.Comment;
 import ru.otus.borodkin.elibrary.repositories.CommentRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,13 +24,16 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CommentDto> findByBookId(Pageable pageable, long bookId) {
+    public List<CommentDto> findByBookId(long bookId) {
         var book = booksService.findById(bookId);
         if (book.isEmpty()) {
             throw new RestNotFoundException();
         }
-        var comments = commentRepository.findAllByBook_Id(pageable, bookId);
-        return comments.map(comment -> modelMapper.map(comment, CommentDto.class));
+        var comments = commentRepository.findAllByBook_Id(bookId);
+        return comments
+                .stream()
+                .map(comment -> modelMapper.map(comment, CommentDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
