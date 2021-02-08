@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.BookDto;
+import ru.otus.borodkin.elibrary.exceptions.RestException;
+import ru.otus.borodkin.elibrary.exceptions.RestNotFoundException;
 import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.models.Book;
 import ru.otus.borodkin.elibrary.repositories.BookRepository;
@@ -32,15 +34,10 @@ public class BooksServiceImpl implements BooksService {
     @Transactional
     public BookDto insertBook(String title, long genreId, List<Long> authors) {
         var optionalGenre = genresService.findById(genreId);
-        if (optionalGenre.isPresent()) {
-            List<Author> authorList = authorsService.getAuthorsByList(authors);
-            var book = new Book(0, title, optionalGenre.get(), authorList, null);
-            bookRepository.save(book);
-            return modelMapper.map(book, BookDto.class);
-        } else {
-            return null;
-        }
-
+        List<Author> authorList = authorsService.getAuthorsByList(authors);
+        var book = new Book(0, title, optionalGenre.orElseThrow(() -> new RestException("Не найден жанр")), authorList, null);
+        bookRepository.save(book);
+        return modelMapper.map(book, BookDto.class);
     }
 
     @Override
@@ -48,34 +45,26 @@ public class BooksServiceImpl implements BooksService {
     public void updateBook(long bookId, String title, long genreId, List<Long> authors) {
         var optionalBook = findById(bookId);
         var optionalGenre = genresService.findById(genreId);
-        if (optionalBook.isPresent() && optionalGenre.isPresent()) {
-            var book = optionalBook.get();
-            var genre = optionalGenre.get();
-            book.setTitle(title);
-            book.setGenre(genre);
-            book.setAuthors(authorsService.getAuthorsByList(authors));
-            bookRepository.save(book);
-        }
+        var book = optionalBook.orElseThrow(() -> new RestException("Не найдена книга"));
+        var genre = optionalGenre.orElseThrow(() -> new RestException("Не найден жанр"));
+        book.setTitle(title);
+        book.setGenre(genre);
+        book.setAuthors(authorsService.getAuthorsByList(authors));
+        bookRepository.save(book);
     }
 
     @Override
     @Transactional
     public void deleteBookById(long bookId) {
         var optionalBook = findById(bookId);
-        if (optionalBook.isPresent()) {
-            bookRepository.delete(optionalBook.get());
-        }
+        bookRepository.delete(optionalBook.orElseThrow(RestNotFoundException::new));
     }
 
     @Override
     @Transactional(readOnly = true)
     public BookDto findDtoById(long bookId) {
         var optionalBook = this.findById(bookId);
-        if (optionalBook.isPresent()) {
-            return modelMapper.map(optionalBook.get(), BookDto.class);
-        } else {
-            return null;
-        }
+        return modelMapper.map(optionalBook.orElseThrow(RestNotFoundException::new), BookDto.class);
     }
 
     @Override

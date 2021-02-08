@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.borodkin.elibrary.dto.BookDto;
+import ru.otus.borodkin.elibrary.dto.CommentDto;
 import ru.otus.borodkin.elibrary.services.BooksService;
 import ru.otus.borodkin.elibrary.services.CommentsService;
 
@@ -46,8 +47,23 @@ public class BooksController {
     }
 
     @DeleteMapping("/rest/books/{bookId}")
-    public void put(
+    public void delete(
             @PathVariable Long bookId) {
         booksService.deleteBookById(bookId);
+    }
+
+    @GetMapping("/rest/books/{bookId}/comments")
+    public Page<CommentDto> getBookComments(
+            Pageable pageable,
+            @PathVariable(value = "bookId") Long bookId) {
+        return commentsService.findByBookId(pageable, bookId);
+    }
+
+    @PostMapping("/rest/books/{bookId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto postComment(
+            @PathVariable(value = "bookId") Long bookId,
+            @RequestParam String text) {
+        return commentsService.insertComment(bookId, text);
     }
 }

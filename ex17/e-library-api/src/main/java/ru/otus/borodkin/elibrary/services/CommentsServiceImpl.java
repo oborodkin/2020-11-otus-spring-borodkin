@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.CommentDto;
+import ru.otus.borodkin.elibrary.exceptions.RestException;
+import ru.otus.borodkin.elibrary.exceptions.RestNotFoundException;
 import ru.otus.borodkin.elibrary.models.Comment;
 import ru.otus.borodkin.elibrary.repositories.CommentRepository;
 
@@ -23,6 +25,10 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @Transactional(readOnly = true)
     public Page<CommentDto> findByBookId(Pageable pageable, long bookId) {
+        var book = booksService.findById(bookId);
+        if (book.isEmpty()) {
+            throw new RestNotFoundException();
+        }
         var comments = commentRepository.findAllByBook_Id(pageable, bookId);
         return comments.map(comment -> modelMapper.map(comment, CommentDto.class));
     }
@@ -34,49 +40,32 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    public CommentDto insertComment(long bookId, String text) {
+        var optionalBook = booksService.findById(bookId);
+        var comment = new Comment(0, optionalBook.orElseThrow(() -> new RestException("Не найдена книга")), text);
+        commentRepository.save(comment);
+        return modelMapper.map(comment, CommentDto.class);
+    }
+
+    @Override
+    public void updateComment(long commentId, String text) {
+        var optionalComment = this.findById(commentId);
+        var comment = optionalComment.orElseThrow(() -> new RestException("Не найден комментарий"));
+        comment.setText(text);
+        commentRepository.save(comment);
+    }
+
+    @Override
+    public void deleteCommentById(long commentId) {
+        var optionalComment = this.findById(commentId);
+        var comment = optionalComment.orElseThrow(RestNotFoundException::new);
+        commentRepository.delete(comment);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public CommentDto findDtoById(long commentId) {
         var optionalComment = this.findById(commentId);
-        if (optionalComment.isPresent()) {
-            return modelMapper.map(optionalComment.get(), CommentDto.class);
-        } else {
-            return null;
-        }
+        return modelMapper.map(optionalComment.orElseThrow(RestNotFoundException::new), CommentDto.class);
     }
-
-/*
-
-    @Override
-    public Page<CommentDto> findByBookId(long bookId) {
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public Comment insertComment(long bookId, String text) {
-        var comment = new Comment(0, bookId, text);
-        return commentRepository.save(comment);
-    }
-
-    @Override
-    @Transactional
-    public void updateComment(long commentId, String text) {
-        var optionalComment = findById(commentId);
-        if (optionalComment.isPresent()) {
-            var comment = optionalComment.get();
-            comment.setText(text);
-            commentRepository.save(comment);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void deleteCommentById(long commentId) {
-        var optionalComment = findById(commentId);
-        if (optionalComment.isPresent()) {
-            commentRepository.delete(optionalComment.get());
-        }
-    }
-
- */
 }

@@ -11,9 +11,7 @@ public interface CommentsService {
     Page<CommentDto> findByBookId(Pageable pageable, long bookId);
     Optional<Comment> findById(long commentId);
     CommentDto findDtoById(long commentId);
-
-//    Optional<Comment> findById(long commentId);
-//    Comment insertComment(long bookId, String text);
-//    void updateComment(long commentId, String text);
-//    void deleteCommentById(long commentId);
+    CommentDto insertComment(long bookId, String text);
+    void updateComment(long commentId, String text);
+    void deleteCommentById(long commentId);
 }

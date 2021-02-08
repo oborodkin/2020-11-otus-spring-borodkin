@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.AuthorDto;
+import ru.otus.borodkin.elibrary.exceptions.RestException;
+import ru.otus.borodkin.elibrary.exceptions.RestNotFoundException;
 import ru.otus.borodkin.elibrary.models.Author;
 import ru.otus.borodkin.elibrary.repositories.AuthorRepository;
 
@@ -23,6 +25,9 @@ public class AuthorsServiceImpl implements AuthorsService {
     @Transactional(readOnly = true)
     public List<Author> getAuthorsByList(List<Long> authors) {
         var authorsList = authorRepository.findAuthorsByIdIn(authors);
+        if (authors.size() != authorsList.size()) {
+            throw new RestException("Не найдены авторы");
+        }
         return authorsList;
     }
 
@@ -35,11 +40,7 @@ public class AuthorsServiceImpl implements AuthorsService {
     @Transactional(readOnly = true)
     public AuthorDto findDtoById(long authorId) {
         var optionalAuthor = this.findById(authorId);
-        if (optionalAuthor.isPresent()) {
-            return modelMapper.map(optionalAuthor.get(), AuthorDto.class);
-        } else {
-            return null;
-        }
+        return modelMapper.map(optionalAuthor.orElseThrow(RestNotFoundException::new), AuthorDto.class);
     }
 
     @Override

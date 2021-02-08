@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.borodkin.elibrary.dto.GenreDto;
+import ru.otus.borodkin.elibrary.exceptions.RestNotFoundException;
 import ru.otus.borodkin.elibrary.models.Genre;
 import ru.otus.borodkin.elibrary.repositories.GenreRepository;
 
@@ -28,11 +29,7 @@ public class GenresServiceImpl implements GenresService {
     @Transactional(readOnly = true)
     public GenreDto findDtoById(long genreId) {
         var optionalGenre = this.findById(genreId);
-        if (optionalGenre.isPresent()) {
-            return modelMapper.map(optionalGenre.get(), GenreDto.class);
-        } else {
-            return null;
-        }
+        return modelMapper.map(optionalGenre.orElseThrow(RestNotFoundException::new), GenreDto.class);
     }
 
     @Override
