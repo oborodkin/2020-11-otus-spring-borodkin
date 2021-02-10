@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
         :headers="headers"
-        :items="genres"
+        :items="authors"
         sort-by="id"
         class="elevation-1"
         :loading="loading"
@@ -30,7 +30,7 @@ import {mapState} from "vuex/dist/vuex.mjs";
 import {mapActions} from "vuex";
 
 export default {
-  name: "Genres",
+  name: "Authors",
   props: ['showSelectAction'],
   data: () => ({
     loading: false,
@@ -41,13 +41,13 @@ export default {
         text: 'ID', value: 'id', align: 'center', sortable: true,
       },
       {
-        text: 'Название', value: 'name', align: 'left', sortable: true
+        text: 'ФИО', value: 'fullName', align: 'left', sortable: true
       },
       {
         text: 'Действия', value: 'actions', sortable: false
       }
     ],
-    genres: [],
+    authors: [],
     selectedIndex: -1,
     selectedItem: {
       id: 0,
@@ -65,7 +65,7 @@ export default {
   }),
 
   computed: {
-    ...mapState("genre", ["genresData"]),
+    ...mapState("author", ["authorsData"]),
 
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -86,37 +86,37 @@ export default {
   },
 
   methods: {
-    ...mapActions("genre", ["get"]),
+    ...mapActions("author", ["get"]),
 
     async initialize() {
       this.loading = true;
       await this.get();
-      this.genres = this.genresData;
+      this.authors = this.authorsData;
       this.loading = false;
     },
 
     selectItem(item) {
-      this.selectedIndex = this.genres.indexOf(item)
+      this.selectedIndex = this.authors.indexOf(item)
       this.selectedItem = Object.assign({}, item)
-      this.$emit('genreSelected', {
-        genre: this.selectedItem
+      this.$emit('authorSelected', {
+        author: this.selectedItem
       })
     },
 
     editItem(item) {
-      this.editedIndex = this.genres.indexOf(item)
+      this.editedIndex = this.authors.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
     deleteItem(item) {
-      this.editedIndex = this.genres.indexOf(item)
+      this.editedIndex = this.authors.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
 
     deleteItemConfirm() {
-      this.genres.splice(this.editedIndex, 1)
+      this.authors.splice(this.editedIndex, 1)
       this.closeDelete()
     },
 
@@ -138,9 +138,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.genres[this.editedIndex], this.editedItem)
+        Object.assign(this.authors[this.editedIndex], this.editedItem)
       } else {
-        this.genres.push(this.editedItem)
+        this.authors.push(this.editedItem)
       }
       this.close()
     },

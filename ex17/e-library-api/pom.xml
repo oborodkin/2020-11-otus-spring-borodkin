@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.otus.borodkin</groupId>
-    <artifactId>e-library</artifactId>
+    <artifactId>e-library-api</artifactId>
     <version>0.0.1</version>
-    <name>e-library</name>
+    <name>e-library-api</name>
     <description>E-Library</description>
 
     <properties>

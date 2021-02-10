@@ -7,7 +7,7 @@ const state = {
 const getters = {};
 
 const mutations = {
-    setGenresPages(state, genres) {
+    setGenresData(state, genres) {
         state.genresData = genres;
     }
 };
@@ -15,7 +15,7 @@ const mutations = {
 const actions = {
     async get({commit, dispatch}) {
         const response = await GenreService.get();
-        commit("setGenresPages", response);
+        commit("setGenresData", response);
     }
 };
 
