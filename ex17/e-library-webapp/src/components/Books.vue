@@ -58,7 +58,12 @@
                   <v-row>
                     <v-col cols="6" sm="6" md="6">
                       <v-list flat>
-                        <v-subheader>Автор(ы)</v-subheader>
+                        <v-subheader>Автор(ы)
+                          <v-btn icon small @click="dialogAuthors = true">
+                            <v-icon>mdi-account-plus</v-icon>
+                          </v-btn>
+
+                        </v-subheader>
                         <v-list-item v-for="(author, i) in editedItem.authors" :key="i">
                           <v-list-item-content>
                             <v-list-item-title v-text="author.fullName"></v-list-item-title>
@@ -70,6 +75,22 @@
                           </v-list-item-action>
                         </v-list-item>
                       </v-list>
+                      <div class="text-center">
+                        <v-dialog v-model="dialogAuthors" width="900">
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2">Выберить автора для книги</v-card-title>
+
+                            <Authors showSelectAction="true" @authorSelected="onAuthorSelected"></Authors>
+
+                            <v-divider></v-divider>
+
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" text @click="dialogAuthors = false">Закрыть</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                      </div>
                     </v-col>
 
                   </v-row>
@@ -122,10 +143,12 @@
 import {mapState} from "vuex/dist/vuex.mjs";
 import {mapActions} from "vuex";
 import Genres from "@/components/Genres";
+import Authors from "@/components/Authors";
 
 export default {
   name: "Books",
   components: {
+    Authors,
     Genres
   },
   data: () => ({
@@ -133,6 +156,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     dialogGenre: false,
+    dialogAuthors: false,
     headers: [
       {
         text: 'ID', value: 'id', align: 'center', sortable: true,
@@ -204,7 +228,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("book", ["get", "put", "post"]),
+    ...mapActions("book", ["get", "put", "post", "delete"]),
 
     async initialize() {
       this.loading = true;
@@ -237,6 +261,7 @@ export default {
     },
 
     deleteItemConfirm() {
+      this.delete(this.editedItem.id);
       this.books.splice(this.editedIndex, 1)
       this.closeDelete()
     },
@@ -279,18 +304,20 @@ export default {
       this.dialogGenre = false;
     },
 
+    onAuthorSelected(data) {
+      this.removeAuthor(data.author.id);
+      this.editedItem.authors.push(data.author);
+      this.dialogAuthors = false;
+    },
+
     removeAuthor(id) {
-      if (this.editedIndex > -1) {
-        this.editedItem.authors.forEach((author, i) => {
-          if (author.id == id) {
-            this.editedItem.authors.splice(i, 1)
-          }
-        });
-      } else {
-        this.books.push(this.editedItem);
-        this.post(this.editedItem);
-      }
+      this.editedItem.authors.forEach((author, i) => {
+        if (author.id == id) {
+          this.editedItem.authors.splice(i, 1)
+        }
+      });
     }
+
   }
 }
 </script>

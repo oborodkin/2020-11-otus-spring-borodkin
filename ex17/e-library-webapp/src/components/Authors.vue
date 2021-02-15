@@ -6,7 +6,7 @@
         sort-by="id"
         class="elevation-1"
         :loading="loading"
-        loading-text="Loading... Please wait"
+        loading-text="Идёт загрузка..."
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -53,31 +53,16 @@ export default {
       id: 0,
       name: ''
     },
-    editedIndex: -1,
-    editedItem: {
-      id: 0,
-      name: ''
-    },
-    defaultItem: {
-      id: 0,
-      name: ''
-    },
   }),
 
   computed: {
     ...mapState("author", ["authorsData"]),
 
-    formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-    },
   },
 
   watch: {
     dialog(val) {
       val || this.close()
-    },
-    dialogDelete(val) {
-      val || this.closeDelete()
     },
   },
 
@@ -103,47 +88,10 @@ export default {
       })
     },
 
-    editItem(item) {
-      this.editedIndex = this.authors.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
-
-    deleteItem(item) {
-      this.editedIndex = this.authors.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
-    },
-
-    deleteItemConfirm() {
-      this.authors.splice(this.editedIndex, 1)
-      this.closeDelete()
-    },
-
     close() {
       this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
     },
 
-    closeDelete() {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.authors[this.editedIndex], this.editedItem)
-      } else {
-        this.authors.push(this.editedItem)
-      }
-      this.close()
-    },
   }
 }
 </script>

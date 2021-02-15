@@ -21,8 +21,12 @@ const BookService = {
         book.authors.forEach(author => {
             formData.append("authorId", author.id);
         });
-        await RestService.post(`books`, formData);
-    }
+        let response = await RestService.post(`books`, formData);
+        return response.data;
+    },
+    delete: async function (id) {
+        let response = await RestService.delete(`books/${id}`);
+    },
 
 };
 
