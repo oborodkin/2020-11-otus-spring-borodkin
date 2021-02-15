@@ -16,6 +16,12 @@ const actions = {
     async get({commit, dispatch}) {
         const response = await BookService.get();
         commit("setBooksData", response);
+    },
+    async put({}, book) {
+        await BookService.put(book);
+    },
+    async post({}, book) {
+        await BookService.post(book);
     }
 };
 

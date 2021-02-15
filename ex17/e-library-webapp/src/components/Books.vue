@@ -63,6 +63,11 @@
                           <v-list-item-content>
                             <v-list-item-title v-text="author.fullName"></v-list-item-title>
                           </v-list-item-content>
+                          <v-list-item-action>
+                            <v-btn elevation="2" icon small @click="removeAuthor(author.id)">
+                              <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                          </v-list-item-action>
                         </v-list-item>
                       </v-list>
                     </v-col>
@@ -153,7 +158,8 @@ export default {
       genre: {
         id: 0,
         name: ''
-      }
+      },
+      authors: []
     },
     editedIndex: -1,
     editedItem: {
@@ -162,7 +168,8 @@ export default {
       genre: {
         id: 0,
         name: ''
-      }
+      },
+      authors: []
     },
     defaultItem: {
       id: 0,
@@ -170,7 +177,8 @@ export default {
       genre: {
         id: 0,
         name: ''
-      }
+      },
+      authors: []
     },
   }),
 
@@ -196,7 +204,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("book", ["get"]),
+    ...mapActions("book", ["get", "put", "post"]),
 
     async initialize() {
       this.loading = true;
@@ -208,17 +216,23 @@ export default {
     selectItem(item) {
       this.selectedIndex = this.books.indexOf(item)
       this.selectedItem = Object.assign({}, item)
+      this.selectedItem.authors = item.authors.slice();
+      this.selectedItem.genre = Object.assign({}, item.genre)
     },
 
     editItem(item) {
       this.editedIndex = this.books.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.editedItem.authors = item.authors.slice();
+      this.editedItem.genre = Object.assign({}, item.genre)
       this.dialog = true
     },
 
     deleteItem(item) {
       this.editedIndex = this.books.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.editedItem.authors = item.authors.slice();
+      this.editedItem.genre = Object.assign({}, item.genre)
       this.dialogDelete = true
     },
 
@@ -231,6 +245,8 @@ export default {
       this.dialog = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedItem.authors = this.defaultItem.authors.slice();
+        this.editedItem.genre = Object.assign({}, this.defaultItem.genre)
         this.editedIndex = -1
       })
     },
@@ -239,6 +255,8 @@ export default {
       this.dialogDelete = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedItem.authors = this.defaultItem.authors.slice();
+        this.editedItem.genre = Object.assign({}, this.defaultItem.genre)
         this.editedIndex = -1
       })
     },
@@ -246,8 +264,12 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.books[this.editedIndex], this.editedItem)
+        this.books[this.editedIndex].authors = this.editedItem.authors.slice();
+        Object.assign(this.books[this.editedIndex].genre, this.editedItem.genre)
+        this.put(this.editedItem);
       } else {
-        this.books.push(this.editedItem)
+        this.books.push(this.editedItem);
+        this.post(this.editedItem);
       }
       this.close()
     },
@@ -255,6 +277,19 @@ export default {
     onGenreSelected(data) {
       this.editedItem.genre = data.genre;
       this.dialogGenre = false;
+    },
+
+    removeAuthor(id) {
+      if (this.editedIndex > -1) {
+        this.editedItem.authors.forEach((author, i) => {
+          if (author.id == id) {
+            this.editedItem.authors.splice(i, 1)
+          }
+        });
+      } else {
+        this.books.push(this.editedItem);
+        this.post(this.editedItem);
+      }
     }
   }
 }

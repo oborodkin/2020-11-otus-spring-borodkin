@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-tabs>
-        <v-tab :to="'home'">Главная</v-tab>
+        <v-tab :to="'/'">Главная</v-tab>
         <v-tab :to="'books'">Книги</v-tab>
         <v-tab :to="'authors'">Авторы</v-tab>
         <v-tab :to="'genres'">Жанры</v-tab>
